@@ -64,4 +64,4 @@ pdm run streamlit run main.py
 
 ## Autoren
 
-Antonio Mrkonja
+Antonio Mrkonja, Lenn Oßwald, Noah Reinermann
