@@ -1,7 +1,6 @@
-import json
 import numpy as np
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objects as go
 from scipy.signal import find_peaks as scipy_find_peaks
 
 
@@ -12,19 +11,15 @@ class EKGdata:
         self.date = ekg_dict["date"]
         self.data = ekg_dict["result_link"]
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['Messwerte in mV', 'Zeit in ms'])
-        self.df = self.df.iloc[:5000].reset_index(drop=True)
+        self.df = self.df.reset_index(drop=True)
         self.peaks = []
 
     def find_peaks(self):
         values = self.df['Messwerte in mV'].to_numpy()
         times = self.df['Zeit in ms'].to_numpy()
 
-        # Zeitaufloesung berechnen: ms pro Sample
         ms_per_sample = np.mean(np.diff(times))
-        # 300ms Mindestabstand zwischen Peaks
         min_distance_samples = int(300 / ms_per_sample)
-
-        # Schwellenwert: Mittelwert + 1 Standardabweichung
         threshold = np.mean(values) + np.std(values)
 
         peaks, _ = scipy_find_peaks(values, height=threshold, distance=min_distance_samples)
@@ -41,20 +36,33 @@ class EKGdata:
         return round(60000.0 / np.mean(intervals), 1)
 
     def plot_time_series(self, n_points=2000):
+        # Ersten n_points Samples fuer den Plot
         plot_df = self.df.head(n_points)
         hr = self.estimate_hr()
         title = f'EKG Signal mit Peaks (HR: {hr} bpm)' if hr else 'EKG Signal mit Peaks'
 
-        fig = px.line(plot_df, x='Zeit in ms', y='Messwerte in mV', title=title)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=plot_df['Zeit in ms'],
+            y=plot_df['Messwerte in mV'],
+            mode='lines',
+            name='EKG'
+        ))
 
-        peak_points = self.df.loc[self.peaks]
-        peak_points = peak_points[peak_points['Zeit in ms'] <= plot_df['Zeit in ms'].iloc[-1]]
-        if len(peak_points):
-            fig.add_scatter(
-                x=peak_points['Zeit in ms'],
-                y=peak_points['Messwerte in mV'],
+        # Nur Peaks die innerhalb der ersten n_points Samples liegen
+        visible_peaks = [p for p in self.peaks if p < n_points]
+        if visible_peaks:
+            fig.add_trace(go.Scatter(
+                x=self.df.loc[visible_peaks, 'Zeit in ms'],
+                y=self.df.loc[visible_peaks, 'Messwerte in mV'],
                 mode='markers',
                 marker=dict(color='red', size=8),
                 name='Peaks'
-            )
+            ))
+
+        fig.update_layout(
+            title=title,
+            xaxis_title='Zeit in ms',
+            yaxis_title='Messwerte in mV'
+        )
         return fig
