@@ -6,7 +6,16 @@ Ein Python-Projekt zur Visualisierung von Personen und deren EKG-Daten in einem 
 
 Das Dashboard laedt Personendaten aus einer JSON-Datenbank und zeigt diese zusammen mit den zugehoerigen EKG-Daten an. Fuer jede Person wird das Alter und die maximale Herzfrequenz berechnet. Die EKG-Daten werden als interaktiver Plot dargestellt, in dem die R-Peaks markiert und die Herzfrequenz berechnet wird.
 
-![Screenshot](images/screenshot.png)
+<table>
+  <tr>
+    <td><img src="images/screenshot.png" alt="Screenshot" width="400"/></td>
+    <td><img src="images/demo.gif" alt="Demo" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Screenshot</b></td>
+    <td align="center"><b>Demo</b></td>
+  </tr>
+</table>
 
 ## Projektstruktur
 
@@ -21,7 +30,8 @@ Dashboard_Integration_I/
 │   ├── ekg_data/
 │   └── pictures/
 ├── images/
-│   └── screenshot.png
+│   ├── screenshot.png
+│   └── demo.gif
 ├── pyproject.toml
 ├── pdm.lock
 └── .gitignore
