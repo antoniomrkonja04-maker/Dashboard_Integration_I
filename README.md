@@ -17,7 +17,7 @@ Das Dashboard laedt Personendaten aus einer JSON-Datenbank und zeigt diese zusam
   </tr>
 </table>
 
-## Projektstruktur
+## Projektstruktur:
 
 ```
 Dashboard_Integration_I/
