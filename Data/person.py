@@ -1,5 +1,6 @@
 import json
 from PIL import Image
+from datetime import date
 
 def get_person_data():
     """
@@ -43,6 +44,22 @@ class Person:
         self.hr_max = 220 - (2025-int(date_of_birth))
         self.gender = gender
 
+    def calc_age():
+        return 2026-self.date_of_birth
+    
+    def calc_max_heart_rate(self):
+        if sex == "Male":
+            return 220 - self.calc_age()
+        elif sex == "Female":
+            return 206 - (0.88 * self.calc_age())
+        
+    def load_by_id(id):
+        persons = get_person_data()
+        for person in persons:
+            if person.id == id:
+                return person
+    
+        
 
     def set_hr(self, hr):
         self.hr_max = hr
