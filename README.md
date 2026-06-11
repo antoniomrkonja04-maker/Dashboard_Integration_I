@@ -14,7 +14,7 @@ Das Dashboard laedt Personendaten aus einer JSON-Datenbank und zeigt diese zusam
 
 ![Demo](images/demo.gif)
 
-## Projektstruktur:
+## Projektstruktur
 
 ```
 Dashboard_Integration_I/
@@ -37,9 +37,12 @@ Dashboard_Integration_I/
 ## Voraussetzungen
 
 - Python 3.12 oder neuer
-- PDM
+- PDM installiert (`pip install pdm`)
 
-## Installation
+## ⚠️ Nach jedem Klonen / neuen Checkout
+
+> **Wichtig:** Nach dem Klonen des Repos muss einmalig `pdm install` ausgefuehrt werden,  
+> sonst fehlen Pakete wie `scipy`, `streamlit` und `plotly`!
 
 ```bash
 pdm install
