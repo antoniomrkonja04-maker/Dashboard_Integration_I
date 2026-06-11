@@ -2,6 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.express as px
+from scipy.signal import find_peaks as scipy_find_peaks
 
 
 class EKGdata:
@@ -14,28 +15,20 @@ class EKGdata:
         self.df = self.df.iloc[:5000].reset_index(drop=True)
         self.peaks = []
 
-    def find_peaks(self, min_height=None, min_distance_ms=300):
+    def find_peaks(self):
         values = self.df['Messwerte in mV'].to_numpy()
         times = self.df['Zeit in ms'].to_numpy()
 
-        if min_height is None:
-            min_height = np.mean(values) + 0.5 * np.std(values)
+        # Zeitaufloesung berechnen: ms pro Sample
+        ms_per_sample = np.mean(np.diff(times))
+        # 300ms Mindestabstand zwischen Peaks
+        min_distance_samples = int(300 / ms_per_sample)
 
-        candidate_indices = [
-            i for i in range(1, len(values) - 1)
-            if values[i] > values[i - 1]
-            and values[i] > values[i + 1]
-            and values[i] >= min_height
-        ]
+        # Schwellenwert: Mittelwert + 1 Standardabweichung
+        threshold = np.mean(values) + np.std(values)
 
-        filtered_peaks = []
-        last_peak_time = -np.inf
-        for idx in candidate_indices:
-            if times[idx] - last_peak_time >= min_distance_ms:
-                filtered_peaks.append(idx)
-                last_peak_time = times[idx]
-
-        self.peaks = filtered_peaks
+        peaks, _ = scipy_find_peaks(values, height=threshold, distance=min_distance_samples)
+        self.peaks = list(peaks)
         return self.peaks
 
     def estimate_hr(self):
