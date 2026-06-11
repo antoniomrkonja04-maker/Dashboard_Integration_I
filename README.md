@@ -8,8 +8,8 @@ Das Dashboard laedt Personendaten aus einer JSON-Datenbank und zeigt diese zusam
 
 <table>
   <tr>
-    <td><img src="images/screenshot.png" alt="Screenshot" width="400"/></td>
-    <td><img src="images/demo.gif" alt="Demo" width="400"/></td>
+    <td><img src="images/screenshot.png" alt="Screenshot" width="600"/></td>
+    <td><img src="images/demo.gif" alt="Demo" width="600"/></td>
   </tr>
   <tr>
     <td align="center"><b>Screenshot</b></td>
